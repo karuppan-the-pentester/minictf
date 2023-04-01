@@ -36,28 +36,14 @@
 	if (isset($_POST['signin'])) {
 		$email = $_POST['email'];
 		$password = $_POST['password'];
-		$select_user_query = "SELECT * FROM users WHERE username='$email';";
+		$select_user_query = "SELECT id FROM users WHERE `username`='$email' AND `passwd`='$password';";
 		$select_user_result = mysqli_query($connection, $select_user_query);
 		while ($row = mysqli_fetch_assoc($select_user_result)) {
-			$db_id = $row['id'];
-			$db_mail = $row['username'];
-			$db_password = $row['passwd'];
-			$db_role = $row['role'];
+			$_SESSION['id'] = $row['id'];
+			header('location: ../index.php');
 			
 		}
-		if ($email !== $db_mail || $password !== $db_password) {
-			header('location: index.php');
-		} else if ($email == $db_mail && $password == $db_password) {
-			if ($db_role == 'admin') {
-				header('location: ../posseidon/index.php');
-				$_SESSION['id']=$db_id;
-			} else {
-				header('location: ../index.php');
-				$_SESSION['id']=$db_id;
-			}
-		} else {
-			echo "Incorrect Password";
-		}
+		
 	}
 	?>
 	<div class="limiter">
@@ -70,7 +56,7 @@
 
 
 					<div class="wrap-input100 validate-input m-b-16" data-validate="Username is required">
-						<input class="input100" type="email" name="email" placeholder="Mail Id">
+						<input class="input100" type="text" name="email" placeholder="Mail Id">
 						<span class="focus-input100"></span>
 					</div>
 
@@ -96,7 +82,7 @@
 	<div id="dropDownSelect1"></div>
 
 	<!-- =============================================================================================== -->
-	<script src="vendor/jquery/jquery-3.2.1.min.js"></script>
+	<!-- <script src="vendor/jquery/jquery-3.2.1.min.js"></script> -->
 	<!--===============================================================================================-->
 	<script src="vendor/animsition/js/animsition.min.js"></script>
 	<!--===============================================================================================-->
@@ -110,7 +96,7 @@
 	<!--===============================================================================================-->
 	<script src="vendor/countdowntime/countdowntime.js"></script>
 	<!--===============================================================================================-->
-	<script src="js/main.js"></script>
+	<!-- <script src="js/main.js"></script> -->
 
 </body>
 
