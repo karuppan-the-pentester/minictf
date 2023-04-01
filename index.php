@@ -415,6 +415,26 @@
           </li>
         </ul>
       </nav>
+      <?php
+      if (isset($_POST['submit'])) {
+
+        $post_image = $_FILES['img']['name'];
+        $post_image_temp = $_FILES['img']['tmp_name'];
+        $dir = "./files/$post_image";
+        move_uploaded_file($post_image_temp, $dir);
+        if($post_image==NULL){
+          // header("Location: ./index.php");
+        }else {
+          $insert_draft_query = "INSERT INTO `files` (`id`, `file_name`, `file_owner`) VALUES (NULL, '$post_image', '$user_id');";
+          $insert_draft_result = mysqli_query($connection, $insert_draft_query);
+          // header("Location: ./datasheets.php");
+        }
+        
+        
+      } 
+
+
+      ?>
       <!-- partial -->
       <div class="main-panel">
         <div class="content-wrapper">
@@ -425,7 +445,7 @@
                 <form class="form-sample" action="#" method="post" enctype="multipart/form-data">
                   <div class="form-group">
                     <label>File upload</label>
-                    <input type="file" name="img[]" class="file-upload-default">
+                    <input type="file" name="img" class="file-upload-default">
                     <div class="input-group col-xs-12">
                       <input type="text" class="form-control file-upload-info" disabled placeholder="Upload Image">
                       <span class="input-group-append">
@@ -433,12 +453,8 @@
                       </span>
                     </div>
                   </div>
+                  <button type="submit" name="submit" class="btn btn-primary me-2" onclick="location.href = './datasheets.php'">Done</button>
                 </form>
-                <?php
-
-
-
-                ?>
               </div>
             </div>
             <!-- content-wrapper ends -->

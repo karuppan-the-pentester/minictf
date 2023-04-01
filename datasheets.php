@@ -32,19 +32,15 @@
     if ($user_id == NULL) {
         header("Location: ./login/index.php");
     }
-    $select_data_query = "SELECT * FROM `users` WHERE userid=" . $user_id;
+    $select_data_query = "SELECT * FROM `users` WHERE id=" . $user_id;
     $select_data_result = mysqli_query($connection, $select_data_query);
     while ($userrow = mysqli_fetch_assoc($select_data_result)) {
         $username = $userrow["username"];
-        $staffrole = $userrow["role"];
     }
-    if ($staffrole == "admin") {
-        $Selcet_Data = "SELECT * FROM `datalist` ; ";
-        $Selcet_Result = mysqli_query($connection, $Selcet_Data);
-    } else {
-        $Selcet_Data = "SELECT * FROM `datalist` WHERE `studdept`='$staffrole'; ";
-        $Selcet_Result = mysqli_query($connection, $Selcet_Data);
-    }
+    
+    $Selcet_Data = "SELECT * FROM `files` WHERE `file_owner`='$user_id'; ";
+    $Selcet_Result = mysqli_query($connection, $Selcet_Data);
+    
     ?>
     <div class="container-scroller">
         <!-- partial:partials/_navbar.html -->
@@ -399,25 +395,14 @@
             <nav class="sidebar sidebar-offcanvas" id="sidebar">
                 <ul class="nav">
                     <li class="nav-item">
-                        <a class="nav-link" href="./datasheets.php">
+                        <a class="nav-link" href="./index.php">
                             <i class="mdi mdi-grid-large menu-icon"></i>
-                            <span class="menu-title">Data Viewer</span>
+                            <span class="menu-title">Dashboard</span>
                         </a>
                     </li>
 
                 
-                <?php
-                if($staffrole=='admin'){
-                    echo '
-                    <li class="nav-item">
-            <a class="nav-link" href="./adddata/index.php">
-              <i class=" mdi mdi-database-plus"></i>
-              <span class="menu-title"> Add Data</span>
-            </a>
-          </li>
-                    ';
-                }
-                ?>
+                
                 </ul>
             </nav>
 
@@ -428,27 +413,18 @@
                         <table class="table table-hover">
                             <thead>
                                 <tr>
-                                    <th>Student</th>
-                                    <th>dept</th>
-                                    <th>Percentage</th>
-                                    <th>Result</th>
+                                    <th>File Name</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php
                                 while ($datarow = mysqli_fetch_assoc($Selcet_Result)) {
-                                    $stuid = $datarow['id'];
-                                    $stuname = $datarow['studname'];
-                                    $studept = $datarow['studdept'];
-                                    $stuper = $datarow['studper'];
-                                    $stures = $datarow['studres'];
+                                    $file_name=$datarow['file_name'];
                                     echo '
                                     
-                                    <tr class="clickable-row" data-href="./detaildata.php?stuid=' . $stuid . '">
-                                    <td>' . $stuname . '</td>
-                                    <td>' . $studept . '</td>
-                                    <td class="text-success">' . $stuper . '.00% <i class="ti-arrow-up"></i></td>
-                                    <td><label class="badge badge-success">' . $stures . '</label></td>
+                                    <tr class="clickable-row" data-href="./files/' . $file_name . '">
+                                    <td>' . $file_name . '</td>
+                                    <td>Click here</td>
                                 </tr> ';
                                 }
                                 ?>
